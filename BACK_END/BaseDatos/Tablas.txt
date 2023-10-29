@@ -1,0 +1,65 @@
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100),
+    apellido VARCHAR(200),
+    correo VARCHAR(100)
+);
+
+CREATE TABLE peliculas (
+    id SERIAL PRIMARY KEY,
+    nombre varchar(100),
+    duracion int    
+);
+
+CREATE TABLE salas (
+    id SERIAL PRIMARY KEY,
+    nombre varchar(100),
+    N_asientos int    
+);
+
+CREATE TABLE funciones (
+    id SERIAL PRIMARY KEY,
+    pelicula_id int,
+    sala_id int,
+    FechaYhora date,
+    CONSTRAINT fk_funciones_peliculas
+	FOREIGN KEY (pelicula_id)
+	REFERENCES peliculas(id),
+	CONSTRAINT fk_funciones_salas
+	FOREIGN KEY (sala_id)
+	REFERENCES salas(id)
+);
+
+CREATE TABLE reservaciones (
+    id SERIAL PRIMARY KEY,
+    funcion_id int,
+    cliente_id int,
+    CONSTRAINT fk_reservaciones_funciones
+	FOREIGN KEY (funcion_id)
+	REFERENCES funciones(id),	
+	CONSTRAINT fk_reservaciones_clientes
+	FOREIGN KEY (cliente_id)
+	REFERENCES clientes(id)
+);
+
+CREATE TABLE asientos (
+    id SERIAL PRIMARY KEY,
+    fila char,
+    numero int,
+    sala_id int,
+    CONSTRAINT fk_asientos_sala
+	FOREIGN KEY (sala_id)
+	REFERENCES salas(id)
+);
+
+CREATE TABLE AsientosReservados (
+    id SERIAL PRIMARY KEY,
+    reservacion_id int,
+    asiento_id int,
+    CONSTRAINT fk_Asientosreservados_reservaciones
+	FOREIGN KEY (reservacion_id)
+	REFERENCES reservaciones(id),	
+	CONSTRAINT fk_Asientosreservados_asientos
+	FOREIGN KEY (asiento_id)
+	REFERENCES asientos(id)
+);
